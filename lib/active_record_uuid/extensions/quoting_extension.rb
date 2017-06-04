@@ -1,15 +1,15 @@
 module ActiveRecordUuid
   module QuotingExtension
     extend ActiveSupport::Concern
-    
+
     included do
       def quote(value, column = nil)
-        return super if column.blank? or !value.instance_of?(String) or value.bytesize != 36
-        
+        return super(value) if column.blank? or !value.instance_of?(String) or value.bytesize != 36
+
         begin
           uuid = UUIDTools::UUID.parse(value)
         rescue ArgumentError, TypeError
-          return super
+          return super(value)
         end
 
         case column.type
