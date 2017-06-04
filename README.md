@@ -1,5 +1,3 @@
-This has support for Rails 5.1
-
 # ActiveRecordUuid [![Build Status](https://travis-ci.org/chamnap/active_record_uuid.png?branch=master)](https://travis-ci.org/chamnap/active_record_uuid) [![Gem Version](https://badge.fury.io/rb/active_record_uuid.png)](http://badge.fury.io/rb/active_record_uuid) [![Dependency Status](https://gemnasium.com/chamnap/active_record_uuid.png)](https://gemnasium.com/chamnap/active_record_uuid) [![Coverage Status](https://coveralls.io/repos/chamnap/active_record_uuid/badge.png?branch=master)](https://coveralls.io/r/chamnap/active_record_uuid?branch=master) [![Code Climate](https://codeclimate.com/github/chamnap/active_record_uuid.png)](https://codeclimate.com/github/chamnap/active_record_uuid)
 
 `active_record_uuid` is a nice gem that add uuid supports to your `activerecord` models (MySQL). It allows you to store uuid in various formats: binary (16 bytes), base64 (24 bytes), hexdigest (32 bytes), or string (36 bytes), and query back with uuid string.
@@ -29,7 +27,7 @@ And then execute:
 Or install it yourself as:
 
     $ gem install active_record_uuid
-    
+
 ## Upgrade from version 0.0.1
 
 `ActiveRecordBase::UuidBase` and `UuidBaseHelper` are depreciated. Right now, you can configure your model by using `has_uuid` and inherit from `ActiveRecord::Base`. Check out the usage below.
@@ -60,11 +58,11 @@ In order for the gem to work well, you need to specify the column `type` and `li
       t.string :text
       t.timestamps
     end
-    
+
     class Post < ActiveRecord::Base
       has_uuid :primary_key => true, :store_as => :binary
     end
-    
+
 ### General configuration options
 
 You can configure using `ActiveRecordUuid.configure`, and it will apply to any models which use `has_uuid`. Each model can overwrite the general options by passing options into `has_uuid`. The following are default values:
@@ -77,7 +75,7 @@ You can configure using `ActiveRecordUuid.configure`, and it will apply to any m
       store_as    :string         # :string is default
       hook        :before_create  # :before_validation is default
     end
-    
+
 There's a config generator that generates the default configuration file into config/initializers directory.
 Run the following generator command, then edit the generated file.
 
@@ -90,23 +88,23 @@ To use uuid in your model, call `has_uuid` in your model.
     class Post < ActiveRecord::Base
       has_uuid :primary_key => true, :hook => :before_create
     end
-    
+
     # create a post with auto-generated uuid
     post = Post.new(:text => "Manual uuid")
     post.save
     post.uuid   # "79f8a42e-ae60-11e1-9aa9-0026b90faf3c"
-    
+
     # create a post with manual uuid
     post = Post.new(:text => "Manual uuid")
     post.uuid = "79f8a42e-ae60-11e1-9aa9-0026b90faf3c"
     post.save
-    
+
     # assign a uuid
     post.assign_uuid
 
     # assign a uuid and save immediately
     post.assign_uuid!
-    
+
     # check the uuid value is valid or not
     post.uuid_valid?
 
@@ -118,12 +116,12 @@ To use uuid in your model, call `has_uuid` in your model.
     class PostBinary < ActiveRecord::Base
       has_uuid :primary_key => true, :store_as => :binary
     end
-    
+
     post = PostBinary.create(:text => "Binary uuid1")
     # INSERT INTO `post_binaries` (`created_at`, `text`, `updated_at`, `uuid`) VALUES ('2012-06-20 17:32:47', 'Binary uuid1', '2012-06-20 17:32:47', x'4748f690bac311e18e440026b90faf3c')
-    
+
     post.uuid # "4748f690-bac3-11e1-8e44-0026b90faf3c"
-    
+
     # it works as usual for finding records
     PostBinary.find_by_uuid(post.uuid)
     PostBinary.where(:uuid => post.uuid)
@@ -131,7 +129,7 @@ To use uuid in your model, call `has_uuid` in your model.
     PostBinary.find(post.uuid)
     PostBinary.find([post.uuid])
     post.comments.create(:text => "Comment 1")
-    
+
     # access the value that stored in db
     post.reload
     post.attributes_before_type_cast["uuid"]["value"]
@@ -183,6 +181,6 @@ When you set this option to `true`, it expects you have foreign_keys with `_uuid
       has_uuid :primary_key => true, :association => true
       has_many :comments, :foreign_key => "comment_id", :inverse_of => :post
     end
-    
+
 ## Testing
 This gem will set the format for dumping the database schema to `:sql`. This means that it is no longer dump the schema to ruby code but database-independent version, `db/structure.sql`. Therefore, you would not have any problems when running the tests.

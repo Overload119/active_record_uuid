@@ -11,7 +11,8 @@ class ActiveRecord::UuidBase < ::ActiveRecord::Base
         hook        :before_create
       end
     end
-    alias_method_chain :inherited, :uuid
+    alias_method :inherited_without_uuid, :inherited
+    alias_method :inherited, :inherited_with_uuid
   end
 
   self.descendants.each do |kls|
